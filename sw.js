@@ -1,0 +1,7 @@
+const CACHE='pixelart-tutor-v6.0.0';
+const BASE=new URL('./',self.location.href);
+const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'].map(p=>new URL(p,BASE).href);
+self.addEventListener('install',e=>e.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(SHELL.map(url=>new Request(url,{cache:'reload'})));await self.skipWaiting()})()));
+self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())if(k.startsWith('pixelart-tutor-')&&k!==CACHE)await caches.delete(k);await self.clients.claim()})()));
+self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==BASE.origin||!u.pathname.startsWith(BASE.pathname))return;if(e.request.mode==='navigate'){e.respondWith((async()=>{const c=await caches.open(CACHE);try{const r=await fetch(e.request);if(r.ok)await c.put(new URL('./index.html',BASE).href,r.clone());return r}catch{const r=await c.match(new URL('./index.html',BASE).href);return r||Response.error()}})());return}if(SHELL.includes(u.href)){e.respondWith((async()=>{const c=await caches.open(CACHE);return await c.match(e.request)||fetch(e.request)})())}});
+self.addEventListener('message',e=>{if(e.data?.type==='CHECK_CACHE')e.waitUntil((async()=>{const c=await caches.open(CACHE);const hits=await Promise.all(SHELL.map(u=>c.match(u)));e.ports[0]?.postMessage({ready:hits.every(Boolean)})})())});
