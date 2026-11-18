@@ -1,6 +1,6 @@
 # PixelArt Tutor
 
-**A local-first pixel art editor and visual drawing tutor for PC and iPad.**  
+**A local pixel art editor and visual drawing tutor for PC and iPad.**  
 Пиксельный редактор для создания игровых спрайтов по точным подсказкам, от силуэта до готового персонажа.
 
 PixelArt Tutor сравнивает рабочий спрайт с целевым PNG и показывает, какие пиксели нужно добавить, удалить или перекрасить. Он помогает рисовать самостоятельно, исправлять референсы и переносить готовые игровые ассеты в LibreSprite для анимации.
